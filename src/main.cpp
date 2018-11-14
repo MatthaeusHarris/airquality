@@ -28,31 +28,28 @@ uint16_t find_bin(const uint16_t *haystack, uint16_t needle) {
 }
 
 uint16_t calc_AQI(uint16_t pm2dot5, uint16_t pm10) {
-  uint16_t index, pm2dot5_index, pm10_index, i_high, i_low, c, c_high, c_low, aqi_index;
+  uint16_t index, pm2dot5_index, pm10_index, i_high_2dot5, i_low_2dot5, i_high_10, i_low_10;
+  uint16_t c_2dot5, c_high_2dot5, c_low_2dot5, c10, c_high_10, c_low_10, aqi_index, aqi_10, aqi_2dot5;
   pm2dot5_index = find_bin(epa_pm2dot5_high, pm2dot5 * 2);
   pm10_index = find_bin(epa_pm10_high, pm10 * 2);
-  if (pm2dot5_index > pm10_index) {
-    index = pm2dot5_index;
-    c = pm2dot5;
-    c_low = epa_pm2dot5_low[index] / 2;
-    c_high = epa_pm2dot5_high[index] / 2;
+  
+  c_low_2dot5 = epa_pm2dot5_low[pm2dot5_index] / 2;
+  c_high_2dot5 = epa_pm2dot5_high[pm2dot5_index] / 2;
+  i_high_2dot5 = epa_aqi_high[pm2dot5_index];
+  i_low_2dot5 = epa_aqi_low[pm2dot5_index];
+  aqi_2dot5 = ((i_high_2dot5 - i_low_2dot5)*(pm2dot5 - c_low_2dot5))/(c_high_2dot5 - c_low_2dot5)+i_low_2dot5;
+
+  c_low_10 = epa_pm10_low[pm10_index] / 2;
+  c_high_10 = epa_pm10_high[pm10_index] / 2;
+  i_high_10 = epa_aqi_high[pm10_index];
+  i_low_10 = epa_aqi_low[pm10_index];
+  aqi_10 = ((i_high_10 - i_low_10)*(pm10 - c_low_10))/(c_high_10 - c_low_10)+i_low_10;
+  
+  if (aqi_10 > aqi_2dot5) {
+    return aqi_10;
   } else {
-    index = pm10_index;
-    c = pm10;
-    c_low = epa_pm10_low[index] / 2;
-    c_high = epa_pm10_high[index] / 2;
+    return aqi_2dot5;
   }
-  i_high = epa_aqi_high[index];
-  i_low = epa_aqi_low[index];
-  Serial.printf("index: %d\r\n", index);
-  Serial.printf("pm2dot5_index:   %d\r\n", pm2dot5_index);
-  Serial.printf("pm10_index:      %d\r\n", pm10_index);
-  Serial.printf("c:               %d\r\n", c);
-  Serial.printf("c_low:           %d\r\n", c_low / 2);
-  Serial.printf("c_high:          %d\r\n", c_high / 2);
-  Serial.printf("i_high:          %d\r\n", i_high);
-  Serial.printf("i_low:           %d\r\n\n\n", i_low);
-  return ((i_high - i_low)*(c - c_low))/(c_high - c_low)+i_low;
 }
 
 ////////////////////////////////////////
