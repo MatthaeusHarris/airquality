@@ -1,0 +1,6 @@
+{
+    "terminal.integrated.env.linux": {
+        "PATH": "/home/matt/.platformio/penv/bin:/home/matt/.platformio/penv:/home/matt/bin:/usr/local/bin:/usr/local/go/bin:/home/matt/adb:/home/matt/.local/share/umake/bin:/home/matt/.local/share/umake/nodejs/nodejs-lang/bin:/home/matt/.node_modules/bin:/home/matt/bin:/home/matt/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games",
+        "PLATFORMIO_CALLER": "vscode"
+    }
+}
